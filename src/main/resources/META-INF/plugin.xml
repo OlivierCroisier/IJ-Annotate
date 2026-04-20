@@ -1,0 +1,58 @@
+<idea-plugin>
+
+    <id>net.mokatech.ij.plugin.annotate</id>
+    <name>Annotate</name>
+    <vendor url="https://mokatech.net" email="contact@mokatech.net">Moka Technologies</vendor>
+
+    <description><![CDATA[
+        Draw attention to any section of your editor by annotating it with a colored border and a custom label.<br/>
+        Make a difference when presenting courses or during code reviews ! Or simply leave notes in your code for your future self.<br/>
+        <br/>
+        Annotations are saved with your project, and can be edited or deleted individually or in bulk, directly in the editor.
+    ]]></description>
+
+    <change-notes>
+        - 1.0.0 (2026-04-19) : first release
+    </change-notes>
+
+    <applicationListeners>
+        <listener class="net.mokatech.ij.plugin.annotate.listeners.EditorAnnotationInitializer"
+                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+    </applicationListeners>
+
+    <actions>
+        <group id="UserAnnotationGroup" text="Annotate" description="Annotate lines with persistent markers" icon="AllIcons.Actions.Annotate">
+            <add-to-group group-id="EditMenu" anchor="last"/>
+
+            <separator/>
+
+            <action icon="AllIcons.Actions.Annotate" id="AnnotateLines"
+                    text="Annotate Selected Lines" description="Highlights and labels the selected lines."
+                    class="net.mokatech.ij.plugin.annotate.actions.AnnotateAction">
+                <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt shift W" replace-all="true"/>
+            </action>
+
+            <action icon="AllIcons.Actions.Annotate" id="DeleteFileAnnotations"
+                    text="Delete Annotations (Current File)" description="Deletes all annotations from the current file."
+                    class="net.mokatech.ij.plugin.annotate.actions.ClearFileAnnotationsAction">
+                <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            </action>
+
+            <action id="DeleteProjectAnnotations" icon="AllIcons.Actions.Annotate"
+                    text="Delete Annotations (Whole Project)" description="Deletes all annotations from the current project."
+                    class="net.mokatech.ij.plugin.annotate.actions.ClearProjectAnnotationsAction">
+                <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            </action>
+        </group>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="net.mokatech.ij.plugin.annotate.listeners.ProjectAnnotationInitializer"/>
+    </extensions>
+
+    <dependencies>
+        <plugin id="com.intellij.modules.platform"/>
+    </dependencies>
+
+</idea-plugin>
