@@ -10,6 +10,7 @@ import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import kotlin.Unit;
 import kotlin.coroutines.Continuation;
 import net.mokatech.ij.plugin.annotate.services.AnnotationService;
@@ -20,10 +21,12 @@ public class ProjectAnnotationInitializer implements ProjectActivity {
 
     @Override
     public @Nullable Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
-        ApplicationManager.getApplication().invokeLater(() ->
+        AnnotationService service = AnnotationService.getInstance(project);
+        FileEditorManager fem = FileEditorManager.getInstance(project);
+
+        // Reload annotations for automatically-reopened editors
+        Runnable annotationLoadingAction = () ->
                 WriteAction.run(() -> {
-                    AnnotationService service = AnnotationService.getInstance(project);
-                    FileEditorManager fem = FileEditorManager.getInstance(project);
                     for (FileEditor fe : fem.getAllEditors()) {
                         if (fe instanceof TextEditor textEditor) {
                             Editor editor = textEditor.getEditor();
@@ -33,9 +36,11 @@ public class ProjectAnnotationInitializer implements ProjectActivity {
                             }
                         }
                     }
-                }),
-                ModalityState.defaultModalityState()
-        );
+                });
+        ApplicationManager.getApplication().invokeLater(annotationLoadingAction, ModalityState.defaultModalityState());
+
+        // Install the file tracker
+        VirtualFileManager.getInstance().addAsyncFileListener(new FileTrackerListener(project), service);
 
         return null;
     }
