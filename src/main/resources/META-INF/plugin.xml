@@ -5,13 +5,14 @@
     <vendor url="https://mokatech.net" email="contact@mokatech.net">Moka Technologies</vendor>
 
     <description><![CDATA[
-        Draw attention to any section of your editor by annotating it with a colored border and a custom label.<br/>
+        Draw attention to sections of any editor by annotating them with colored borders and a custom labels.<br/>
         Make a difference when presenting courses or during code reviews ! Or simply leave notes in your code for your future self.<br/>
         <br/>
         Annotations are saved with your project, and can be edited or deleted individually or in bulk, directly in the editor.
     ]]></description>
 
     <change-notes>
+        - 1.1.0 (2026-04-27) : keep annotations in sync with moved/renamed files
         - 1.0.0 (2026-04-19) : first release
     </change-notes>
 

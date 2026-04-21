@@ -1,11 +1,11 @@
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    id("org.jetbrains.intellij.platform") version "2.10.2"
+    id("org.jetbrains.intellij.platform") version "2.15.0"
 }
 
 group = "net.mokatech.ij.plugin"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -32,6 +32,7 @@ intellijPlatform {
         }
 
         changeNotes = """
+            - 1.1.0 (2026-04-27) : keep annotations in sync with moved/renamed files
             - 1.0.0 (2026-04-19) : first release
         """.trimIndent()
     }
