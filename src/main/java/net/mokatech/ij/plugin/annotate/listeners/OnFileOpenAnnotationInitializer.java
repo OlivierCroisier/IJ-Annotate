@@ -10,17 +10,20 @@ import com.intellij.openapi.vfs.VirtualFile;
 import net.mokatech.ij.plugin.annotate.services.AnnotationService;
 import org.jetbrains.annotations.NotNull;
 
-public class EditorAnnotationInitializer implements FileEditorManagerListener {
+/**
+ * When files are opened in an Editor, this class recreates the Visuals for the files' annotations (if any)
+ */
+public class OnFileOpenAnnotationInitializer implements FileEditorManagerListener {
 
     @Override
-    public void fileOpened(@NotNull FileEditorManager source, @NotNull VirtualFile file) {
-        Project project = source.getProject();
+    public void fileOpened(@NotNull FileEditorManager manager, @NotNull VirtualFile file) {
+        Project project = manager.getProject();
+        FileEditor[] editors = manager.getEditors(file);
         AnnotationService service = AnnotationService.getInstance(project);
-        FileEditor[] editors = source.getEditors(file);
         for (FileEditor fileEditor : editors) {
             if (fileEditor instanceof TextEditor textEditor) {
                 Editor editor = textEditor.getEditor();
-                service.loadMarkersForEditor(editor, file.getPath());
+                service.createVisualsForEditor(editor, file.getPath());
             }
         }
     }

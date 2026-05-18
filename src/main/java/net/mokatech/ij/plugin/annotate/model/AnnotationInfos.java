@@ -11,6 +11,11 @@ public class AnnotationInfos {
     // Empty constructor required for serialization
     public AnnotationInfos() {}
 
+    @Override
+    public String toString() {
+        return label;
+    }
+
     public AnnotationInfos(String filePath, int start, int end, String label, String colorHex) {
         this.filePath = filePath;
         this.startOffset = start;

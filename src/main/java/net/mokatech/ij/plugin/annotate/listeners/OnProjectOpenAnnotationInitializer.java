@@ -17,22 +17,22 @@ import net.mokatech.ij.plugin.annotate.services.AnnotationService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ProjectAnnotationInitializer implements ProjectActivity {
+public class OnProjectOpenAnnotationInitializer implements ProjectActivity {
 
     @Override
     public @Nullable Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
         AnnotationService service = AnnotationService.getInstance(project);
-        FileEditorManager fem = FileEditorManager.getInstance(project);
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
 
         // Reload annotations for automatically-reopened editors
         Runnable annotationLoadingAction = () ->
                 WriteAction.run(() -> {
-                    for (FileEditor fe : fem.getAllEditors()) {
-                        if (fe instanceof TextEditor textEditor) {
+                    for (FileEditor fileEditor : fileEditorManager.getAllEditors()) {
+                        if (fileEditor instanceof TextEditor textEditor) {
                             Editor editor = textEditor.getEditor();
                             VirtualFile vf = editor.getVirtualFile();
                             if (vf != null) {
-                                service.loadMarkersForEditor(editor, vf.getPath());
+                                service.createVisualsForEditor(editor, vf.getPath());
                             }
                         }
                     }

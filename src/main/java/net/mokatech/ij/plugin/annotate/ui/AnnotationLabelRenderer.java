@@ -6,9 +6,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.Inlay;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import org.jetbrains.annotations.Nullable;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
+
+import java.awt.*;
 
 public class AnnotationLabelRenderer extends HintRenderer {
 
@@ -41,9 +40,14 @@ public class AnnotationLabelRenderer extends HintRenderer {
         }
 
         Graphics gg = g.create();
-        gg.translate(shift, 0);
-        super.paint(inlay, gg, r, effects);
-        gg.dispose();
+        try {
+            gg.translate(shift, 0);
+            super.paint(inlay, gg, r, effects);
+        } finally {
+            if (gg != null) {
+                gg.dispose();
+            }
+        }
     }
 
 }

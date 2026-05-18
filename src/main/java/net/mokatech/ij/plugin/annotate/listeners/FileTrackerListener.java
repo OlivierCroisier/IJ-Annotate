@@ -15,6 +15,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class listens to file system events and tracks changes such as file renaming,
+ * file moving, and file deletions within a project context, to keep annotations in sync.
+ */
 public class FileTrackerListener implements AsyncFileListener {
 
     private final Project project;
@@ -90,13 +94,13 @@ public class FileTrackerListener implements AsyncFileListener {
             for (String[] change : pathChanges) {
                 String oldPath = change[0];
                 String newPath = change[1];
-                List<AnnotationInfos> anns = service.findForFile(oldPath);
+                List<AnnotationInfos> anns = service.getAllAnnotationsForFile(oldPath);
                 for (AnnotationInfos ann : anns) {
                     ann.filePath = newPath;
                 }
             }
             for (String filePath : deletes) {
-                service.removeForFile(filePath);
+                service.removeAnnotationsForFile(filePath);
             }
         }
     }

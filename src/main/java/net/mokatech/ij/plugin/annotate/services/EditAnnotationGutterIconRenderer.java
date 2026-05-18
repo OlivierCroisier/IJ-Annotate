@@ -12,13 +12,13 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import java.util.Objects;
-import net.mokatech.ij.plugin.annotate.services.AnnotationService;
+
 import net.mokatech.ij.plugin.annotate.ui.AnnotationSettingsDialog;
 
-class EditLabelGutterIconRenderer extends GutterIconRenderer {
+class EditAnnotationGutterIconRenderer extends GutterIconRenderer {
     private final AnnotationInfos annotation;
 
-    public EditLabelGutterIconRenderer(AnnotationInfos annotation) {
+    public EditAnnotationGutterIconRenderer(AnnotationInfos annotation) {
         this.annotation = annotation;
     }
 
@@ -41,7 +41,7 @@ class EditLabelGutterIconRenderer extends GutterIconRenderer {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EditLabelGutterIconRenderer that = (EditLabelGutterIconRenderer) o;
+        EditAnnotationGutterIconRenderer that = (EditAnnotationGutterIconRenderer) o;
         return annotation == that.annotation;
     }
 
@@ -68,7 +68,7 @@ class EditLabelGutterIconRenderer extends GutterIconRenderer {
                     if (!Objects.equals(newLabel, oldLabel) || !Objects.equals(newColor, oldColor)) {
                         annotation.label = newLabel;
                         annotation.colorHex = newColor;
-                        service.registerMarker(editor, annotation);
+                        service.createVisuals(editor, annotation);
                     }
                 }
             }

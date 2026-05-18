@@ -17,7 +17,7 @@
     </change-notes>
 
     <applicationListeners>
-        <listener class="net.mokatech.ij.plugin.annotate.listeners.EditorAnnotationInitializer"
+        <listener class="net.mokatech.ij.plugin.annotate.listeners.OnFileOpenAnnotationInitializer"
                   topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
 
@@ -45,11 +45,14 @@
                     class="net.mokatech.ij.plugin.annotate.actions.ClearProjectAnnotationsAction">
                 <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             </action>
+
         </group>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <postStartupActivity implementation="net.mokatech.ij.plugin.annotate.listeners.ProjectAnnotationInitializer"/>
+        <postStartupActivity implementation="net.mokatech.ij.plugin.annotate.listeners.OnProjectOpenAnnotationInitializer"/>
+        
+        <toolWindow id="AnnotateFiles" anchor="bottom" factoryClass="net.mokatech.ij.plugin.annotate.ui.AnnotationToolWindowFactory" icon="AllIcons.Actions.Annotate" />
     </extensions>
 
     <dependencies>

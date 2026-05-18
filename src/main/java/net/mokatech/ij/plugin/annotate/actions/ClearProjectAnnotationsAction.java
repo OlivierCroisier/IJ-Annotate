@@ -1,22 +1,17 @@
 package net.mokatech.ij.plugin.annotate.actions;
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.TextEditor;
 import com.intellij.openapi.project.Project;
 import net.mokatech.ij.plugin.annotate.services.AnnotationService;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.actionSystem.ActionUpdateThread;
 
+/**
+ * An action that clears all annotations related to the current project.
+ * This is typically used to reset or remove stored annotations within the context of the project.
+ */
 public class ClearProjectAnnotationsAction extends AnAction {
-
-    @Override
-    public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
-    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -24,17 +19,13 @@ public class ClearProjectAnnotationsAction extends AnAction {
         if (project == null) return;
 
         AnnotationService service = AnnotationService.getInstance(project);
-        service.removeForProject();
-
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-        for (FileEditor fileEditor : fileEditorManager.getAllEditors()) {
-            if (fileEditor instanceof TextEditor) {
-                Editor editor = ((TextEditor) fileEditor).getEditor();
-                service.clearVisuals(editor);
-            }
-        }
+        service.removeAnnotationsForProject();
     }
 
+    /**
+     * Tells if the action should be available/active or not.
+     * Condition: the project has annotations
+     */
     @Override
     public void update(@NotNull AnActionEvent e) {
         Project project = e.getProject();
@@ -42,6 +33,11 @@ public class ClearProjectAnnotationsAction extends AnAction {
             AnnotationService annotationService = AnnotationService.getInstance(project);
             e.getPresentation().setEnabled(annotationService.hasAnnotationsForProject());
         }
+    }
+
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
 }
